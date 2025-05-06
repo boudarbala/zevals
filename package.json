@@ -1,0 +1,35 @@
+{
+  "name": "zevals",
+  "version": "0.1.0",
+  "description": "Simple, practical AI evaluations for AI apps.",
+  "scripts": {
+    "build": "pnpm -r tsc",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "ai",
+    "evals",
+    "evaluation",
+    "testing",
+    "langchain",
+    "langchainjs",
+    "langchain-js",
+    "langchain-community",
+    "langchain-community-js",
+    "langchain-community-js"
+  ],
+  "author": "tabaza@open.cx",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.0",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.3"
+  }
+}
