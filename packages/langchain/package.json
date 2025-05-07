@@ -4,7 +4,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "LangChain integration for ZEvals",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
   "keywords": [
     "langchain",
     "ai",
@@ -14,6 +16,9 @@
   ],
   "author": "tabaza@open.cx",
   "license": "MIT",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "dependencies": {
     "@zevals/core": "workspace:^"
   },

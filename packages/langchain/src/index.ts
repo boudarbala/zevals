@@ -7,33 +7,34 @@ import {
   ToolMessage as LCToolMessage,
 } from '@langchain/core/messages';
 import { Runnable } from '@langchain/core/runnables';
-import { Agent, Judge, Message } from '../../core/src/eval-runner';
-import { SyntheticUser } from '../../core/src/segment';
+import { Agent, Judge, Message, SyntheticUser } from '@zevals/core';
 
 export function langChainMessageToZEvals(message: LCBaseMessage): Message | undefined {
-  if (message instanceof LCSystemMessage) {
+  if (message.getType() === 'system') {
     return {
       role: 'system',
       content: message.content.toString(),
     };
   }
-  if (message instanceof LCAIMessage) {
+  if (message.getType() === 'ai') {
+    const aiMessage = message as LCAIMessage;
     return {
       role: 'assistant',
       content: message.content.toString(),
-      tool_calls: message.tool_calls?.map((tc) => ({ id: tc.id, name: tc.name, args: tc.args })),
+      tool_calls: aiMessage.tool_calls?.map((tc) => ({ id: tc.id, name: tc.name, args: tc.args })),
     };
-  } else if (message instanceof LCHumanMessage) {
+  } else if (message.getType() === 'human') {
     return {
       role: 'user',
       content: message.content.toString(),
     };
-  } else if (message instanceof LCToolMessage) {
+  } else if (message.getType() === 'tool') {
+    const m = message as LCToolMessage;
     return {
       role: 'tool',
-      name: message.name ?? '_unknown_',
-      tool_call_id: message.tool_call_id,
-      content: JSON.parse(message.content.toString()),
+      name: m.name ?? '_unknown_',
+      tool_call_id: m.tool_call_id,
+      content: JSON.parse(m.content.toString()),
     };
   }
 }
@@ -89,10 +90,14 @@ export function langChainZEvalsAgent({
         return message ? [message] : [];
       });
 
-      const response = langChainMessageToZEvals(await runnable.invoke(lcMessages));
+      const runnableRes = await runnable.invoke(lcMessages);
+
+      const response = langChainMessageToZEvals(runnableRes);
 
       if (!response) {
-        throw new Error('No result from LangChain');
+        throw new Error(
+          `No result from LangChain: ${runnableRes.content.toString()} - ${JSON.stringify(runnableRes)}`,
+        );
       }
 
       return { response: { role: 'assistant', content: response.content.toString() } };

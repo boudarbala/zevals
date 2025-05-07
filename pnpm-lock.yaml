@@ -57,13 +57,6 @@ importers:
       zod:
         specifier: ^3.24.4
         version: 3.24.4
-    devDependencies:
-      '@langchain/core':
-        specifier: ^0.3.53
-        version: 0.3.53(openai@4.97.0(zod@3.24.4))
-      '@langchain/openai':
-        specifier: ^0.5.10
-        version: 0.5.10(@langchain/core@0.3.53(openai@4.97.0(zod@3.24.4)))
 
   packages/langchain:
     dependencies:
@@ -74,6 +67,28 @@ importers:
       '@langchain/core':
         specifier: ^0.3.53
         version: 0.3.53(openai@4.97.0(zod@3.24.4))
+
+  packages/test:
+    dependencies:
+      '@zevals/autoevals':
+        specifier: workspace:^
+        version: link:../autoevals
+      '@zevals/core':
+        specifier: workspace:^
+        version: link:../core
+      '@zevals/langchain':
+        specifier: workspace:^
+        version: link:../langchain
+    devDependencies:
+      '@langchain/core':
+        specifier: ^0.3.53
+        version: 0.3.53(openai@4.97.0(zod@3.24.4))
+      '@langchain/openai':
+        specifier: ^0.5.10
+        version: 0.5.10(@langchain/core@0.3.53(openai@4.97.0(zod@3.24.4)))
+      autoevals:
+        specifier: ^0.0.127
+        version: 0.0.127
 
 packages:
 

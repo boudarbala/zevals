@@ -1,12 +1,11 @@
+import { AutoEvalsScorerCriterion } from '@zevals/autoevals';
+import { agentResponse, aiEval, evaluate, message } from '@zevals/core';
+import { langChainZEvalsAgent } from '@zevals/langchain';
 import { Factuality } from 'autoevals';
-import { AutoEvalsScorerCriterion } from '.';
-import { evaluate } from '../../core/src/eval-runner';
-import { agentResponse, aiEval, message } from '../../core/src/segment';
-import { getTestModel } from '../../core/src/test.util';
-import { langChainZEvalsAgent } from '../../langchain/src';
+import { getTestModel } from './test.util.js';
 
 describe('Autoevals', () => {
-  test('Running autoevals scorers', async () => {
+  test('Running autoevals scorers', { timeout: 10000 }, async () => {
     const criterion = new AutoEvalsScorerCriterion({
       name: 'factuality',
       scorer: ({ messages }) =>

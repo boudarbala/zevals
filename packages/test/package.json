@@ -1,0 +1,24 @@
+{
+  "name": "test",
+  "private": false,
+  "description": "ZEvals tests",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "tabaza@open.cx",
+  "license": "MIT",
+  "dependencies": {
+    "@zevals/autoevals": "workspace:^",
+    "@zevals/core": "workspace:^",
+    "@zevals/langchain": "workspace:^"
+  },
+  "devDependencies": {
+    "@langchain/core": "^0.3.53",
+    "@langchain/openai": "^0.5.10",
+    "autoevals": "^0.0.127"
+  },
+  "peerDependencies": {
+    "@langchain/core": "^0.3.53"
+  }
+}

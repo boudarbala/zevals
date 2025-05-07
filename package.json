@@ -4,8 +4,8 @@
   "description": "Simple, practical AI evaluations for AI apps.",
   "private": false,
   "scripts": {
-    "build": "pnpm tsc",
-    "test": "vitest run"
+    "build": "pnpm -r build",
+    "test": "pnpm build && vitest run"
   },
   "keywords": [
     "ai",

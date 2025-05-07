@@ -1,9 +1,5 @@
+import { Criterion, CriterionEvaluationParams, CriterionResult } from '@zevals/core';
 import { Score } from 'autoevals';
-import {
-  Criterion,
-  CriterionEvaluationParams,
-  CriterionResult,
-} from '../../core/src/criteria/criterion';
 
 /** Criterion that uses an [autoevals](https://github.com/braintrustdata/autoevals) scorer for evaluation. */
 export class AutoEvalsScorerCriterion implements Criterion<Score> {

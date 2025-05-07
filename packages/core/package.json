@@ -2,10 +2,12 @@
   "name": "@zevals/core",
   "version": "0.1.0",
   "private": false,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "description": "Core for ZEvals",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
   "keywords": [
     "ai",
     "evaluation",
@@ -14,11 +16,10 @@
   ],
   "author": "tabaza@open.cx",
   "license": "MIT",
-  "devDependencies": {
-    "@langchain/core": "^0.3.53",
-    "@langchain/openai": "^0.5.10"
-  },
   "dependencies": {
     "zod": "^3.24.4"
+  },
+  "exports": {
+    ".": "./dist/index.js"
   }
 }

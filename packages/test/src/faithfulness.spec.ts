@@ -1,8 +1,6 @@
-import { langChainZEvalsAgent, langChainZEvalsJudge } from '../../../langchain/src';
-import { evaluate } from '../eval-runner';
-import { aiEval, message } from '../segment';
-import { getTestModel } from '../test.util';
-import { faithfulnessCriterion } from './faithfulness';
+import { aiEval, evaluate, faithfulnessCriterion, message } from '@zevals/core';
+import { langChainZEvalsAgent, langChainZEvalsJudge } from '@zevals/langchain';
+import { getTestModel } from './test.util.js';
 
 describe('FaithfulnessCriterion', () => {
   const agent = langChainZEvalsAgent({

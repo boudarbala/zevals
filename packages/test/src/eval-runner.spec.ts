@@ -1,10 +1,14 @@
 import { ChatOpenAI } from '@langchain/openai';
-import { langChainZEvalsAgent, langChainZEvalsJudge } from '../../langchain/src';
-import { aiAssertion } from './criteria/assertion';
-import { MockCriterion } from './criteria/mock';
-import { evaluate } from './eval-runner';
-import { aiEval, message, userSimulation } from './segment';
-import { getTestModel } from './test.util';
+import {
+  aiAssertion,
+  aiEval,
+  evaluate,
+  message,
+  MockCriterion,
+  userSimulation,
+} from '@zevals/core';
+import { langChainZEvalsAgent, langChainZEvalsJudge } from '@zevals/langchain';
+import { getTestModel } from './test.util.js';
 
 describe('Evaluator', () => {
   const agent = langChainZEvalsAgent({ runnable: getTestModel() });

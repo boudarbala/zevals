@@ -4,7 +4,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "Braintrust Autoevals integration for ZEvals",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
   "keywords": [
     "autoevals",
     "braintrust",
@@ -15,6 +17,9 @@
   ],
   "author": "tabaza@open.cx",
   "license": "MIT",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "dependencies": {
     "@zevals/core": "workspace:^"
   },
