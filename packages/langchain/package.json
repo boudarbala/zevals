@@ -1,12 +1,12 @@
 {
-  "name": "@zevals/core",
-  "version": "0.1.0",
+  "name": "@zevals/langchain",
   "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "Core for ZEvals",
+  "description": "LangChain integration for ZEvals",
   "scripts": {},
   "keywords": [
+    "langchain",
     "ai",
     "evaluation",
     "testing",
@@ -14,11 +14,13 @@
   ],
   "author": "tabaza@open.cx",
   "license": "MIT",
-  "devDependencies": {
-    "@langchain/core": "^0.3.53",
-    "@langchain/openai": "^0.5.10"
-  },
   "dependencies": {
-    "zod": "^3.24.4"
+    "@zevals/core": "workspace:^"
+  },
+  "devDependencies": {
+    "@langchain/core": "^0.3.53"
+  },
+  "peerDependencies": {
+    "@langchain/core": "^0.3.53"
   }
 }

@@ -2,8 +2,9 @@
   "name": "zevals",
   "version": "0.1.0",
   "description": "Simple, practical AI evaluations for AI apps.",
+  "private": false,
   "scripts": {
-    "build": "pnpm -r tsc",
+    "build": "pnpm tsc",
     "test": "vitest run"
   },
   "keywords": [
@@ -21,6 +22,7 @@
   "author": "tabaza@open.cx",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^22.15.14",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
     "@typescript-eslint/parser": "^8.32.0",
     "eslint": "^9.26.0",

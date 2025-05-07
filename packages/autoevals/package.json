@@ -1,0 +1,27 @@
+{
+  "name": "@zevals/autoevals",
+  "private": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "Braintrust Autoevals integration for ZEvals",
+  "scripts": {},
+  "keywords": [
+    "autoevals",
+    "braintrust",
+    "ai",
+    "evaluation",
+    "testing",
+    "testing-tools"
+  ],
+  "author": "tabaza@open.cx",
+  "license": "MIT",
+  "dependencies": {
+    "@zevals/core": "workspace:^"
+  },
+  "devDependencies": {
+    "autoevals": "^0.0.127"
+  },
+  "peerDependencies": {
+    "autoevals": "^0.0.127"
+  }
+}

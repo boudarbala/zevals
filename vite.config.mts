@@ -1,7 +1,13 @@
-import { defineConfig } from "vitest/config";
+import { loadEnv } from 'vite';
+import { defineConfig } from 'vitest/config';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   test: {
-    workspace: ["packages/*"],
+    workspace: ['.'],
+    globals: true,
+    environment: 'node',
+    env: {
+      ...loadEnv(mode, process.cwd(), ''), // Loads all .env variables
+    },
   },
-});
+}));
