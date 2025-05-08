@@ -2,4 +2,7 @@ node_modules
 dist
 .env
 tsconfig.tsbuildinfo
+worksheet.ts
+worksheet.spec.ts
+
 

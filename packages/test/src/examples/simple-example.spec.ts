@@ -1,16 +1,3 @@
-# Zevals
-
-Simple, practical AI evaluations in TypeScript.
-
-Zevals provides utilities for testing AI agents. Unlike the few existing AI eval libraries and frameworks:
-
-- Treats AI evals like end-to-end tests, with less focus on metrics and more focus on binary assertions
-- Designed to evaluate full conversations, not just single query/response pairs
-- Does not impose any testing framework or test runner
-
-# Example
-
-```typescript
 import { ChatOpenAI } from '@langchain/openai';
 import * as zevals from '@zevals/core';
 import { langChainZEvalsJudge } from '@zevals/langchain';
@@ -52,21 +39,3 @@ test('Simple example', async () => {
   // Run your assertions on type-safe outputs
   expect(getResultOrThrow(followupAssertion).output).toBe(true);
 });
-```
-
-# Installation
-
-```sh
-npm install @zevals/core
-```
-
-# Features
-
-- Support for evaluating entire scenarios, with optional user simulation
-- Utilities for LLM-as-a-judge, and more programmatic assertion functions for tool calling
-- Utilities for wrapping your existing user message-handling logic into an agent that can be easily tested
-- Very simple, extensible design, with no assumptions about how you will use the library
-- Facilities for benchmarking using popular benchmarks like tau-bench
-- (Optionally) integrates with any LLM provider via LangChain
-- (Optionally) integrates with Braintrust's autoeval scorers
-- As type-safe as practically possible
