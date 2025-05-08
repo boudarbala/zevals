@@ -39,6 +39,13 @@ export function langChainMessageToZEvals(message: LCBaseMessage): Message | unde
   }
 }
 
+export function langChainMessagesToZEvals(messages: LCBaseMessage[]): Message[] {
+  return messages.flatMap((m) => {
+    const zevalsMessage = langChainMessageToZEvals(m);
+    return zevalsMessage ? [zevalsMessage] : [];
+  });
+}
+
 export function langChainMessageFromZEvals(messages: Message): LCBaseMessage | undefined {
   if (messages.role === 'system') {
     return new LCSystemMessage(messages.content);
@@ -53,6 +60,13 @@ export function langChainMessageFromZEvals(messages: Message): LCBaseMessage | u
       content: JSON.stringify(messages.content),
     });
   }
+}
+
+export function langChainMessagesFromZEvals(messages: Message[]): LCBaseMessage[] {
+  return messages.flatMap((m) => {
+    const lcMessage = langChainMessageFromZEvals(m);
+    return lcMessage ? [lcMessage] : [];
+  });
 }
 
 export function langChainZEvalsSyntheticUser({

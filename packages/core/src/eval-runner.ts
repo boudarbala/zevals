@@ -44,7 +44,7 @@ export type AgentResponseGenerationContext = {
    * Messages that were used as prompts to produce the response.
    * If not specified, the chat history prior to the response will be used for evaluation.
    */
-  promptUsed?: Message[];
+  prompt_used?: Message[];
   /** The tool calls that were made by the LLM. */
   tool_calls?: Array<ToolCall & { result?: Record<string, any> }>;
 };
@@ -95,7 +95,7 @@ export async function evaluate<A extends Agent>({
         m.type === 'message'
           ? [m.message]
           : m.type === 'agent_response'
-            ? [m.agentResponse.response]
+            ? [{ ...m.agentResponse.response, context: m.agentResponse.context }]
             : [],
       );
 

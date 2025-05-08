@@ -70,3 +70,53 @@ npm install @zevals/core
 - (Optionally) integrates with any LLM provider via LangChain
 - (Optionally) integrates with Braintrust's autoeval scorers
 - As type-safe as practically possible
+
+## Assertions
+
+Zevals provies a few ways to assert that your agent did what it was supposed to do. Most notably, you can run assertions on the tool calls made by your agents:
+
+```typescript
+import * as zevals from '@zevals/core';
+import { simpleExampleAgent } from './simple-example-agent.js';
+
+test('Tool calls example', { timeout: 10000 }, async () => {
+  const agent = simpleExampleAgent();
+
+  // We expect the `get_current_date` tool to be called and to return the current date
+  const dateToolCalledAssertion = zevals.aiToolCalls({
+    assertion(toolCalls) {
+      const date = new Date();
+
+      expect(toolCalls).toEqual(
+        expect.arrayContaining([
+          {
+            name: 'get_current_date',
+            args: {},
+            result: {
+              day: date.getDate(),
+              month: date.getMonth(),
+              year: date.getFullYear(),
+            },
+          },
+        ]),
+      );
+    },
+  });
+
+  const { getResultOrThrow } = await zevals.evaluate({
+    agent,
+    segments: [
+      zevals.message({ role: 'user', content: 'What day of month are we at?' }),
+
+      zevals.agentResponse(),
+
+      zevals.aiEval(dateToolCalledAssertion),
+    ],
+  });
+
+  expect(getResultOrThrow(dateToolCalledAssertion).status).toEqual('success');
+});
+```
+
+> [!NOTE]
+> You can find more examples in the [examples directory](./packages/test/src/examples/).

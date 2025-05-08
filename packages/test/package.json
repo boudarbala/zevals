@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@langchain/core": "^0.3.53",
+    "@langchain/langgraph": "^0.2.68",
     "@langchain/openai": "^0.5.10",
     "autoevals": "^0.0.127"
   },

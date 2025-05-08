@@ -59,7 +59,7 @@ describe('Evaluator', () => {
     });
   });
 
-  test('User simulation', async () => {
+  test('User simulation', { timeout: 10000 }, async () => {
     const res = await evaluate({
       agent: agent,
       segments: [
