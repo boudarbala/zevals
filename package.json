@@ -2,10 +2,12 @@
   "name": "zevals",
   "version": "0.1.0",
   "description": "Simple, practical AI evaluations for AI apps.",
-  "private": false,
+  "private": true,
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm build && vitest run"
+    "test": "pnpm build && vitest run",
+    "update-version": "node scripts/update-version.js",
+    "publish-packages": "pnpm update-version && pnpm test && pnpm publish -r --no-git-checks"
   },
   "keywords": [
     "ai",
