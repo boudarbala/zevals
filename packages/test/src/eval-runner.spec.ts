@@ -84,8 +84,7 @@ describe('Evaluator', () => {
     ).toBeTruthy();
 
     expect(
-      res.results[1].type === 'agent_response' &&
-        res.results[1].agentResponse.response.role === 'assistant',
+      res.results[1].type === 'message' && res.results[1].message.role === 'assistant',
     ).toBeTruthy();
 
     expect(

@@ -25,18 +25,13 @@ export type SystemMessage = { role: 'system'; content: string };
 
 export type Message = AIMessage | UserMessage | ToolResultMessage | SystemMessage;
 
-/**
- * The result of evaluating a {@link Segment}, where each `agent_response` is replaced with the agent's actual response,
- * and each `eval`'s result is included.
- */
 export type EvaluatedSegment =
   | { type: 'message'; message: Message }
   | {
       type: 'eval';
       evalResult: CriterionResult<any>;
       criterion: Criterion<any>;
-    }
-  | { type: 'agent_response'; agentResponse: AgentInvocationResult };
+    };
 
 /** The context that was used by the agent to generate a response. */
 export type AgentResponseGenerationContext = {
@@ -52,14 +47,12 @@ export type AgentResponseGenerationContext = {
 /** The result of invoking a {@link Agent} to generate an AI response to be evaluated. */
 export type AgentInvocationResult = {
   /** The final response, i.e. the message returned to the user. */
-  response: AIMessage;
-  /** The context provided to the LLM to produce the output. */
-  context?: AgentResponseGenerationContext;
+  message: AIMessage;
 };
 
 /** An AI agent to evaluate. */
 export interface Agent {
-  invoke(messages: Array<Message>): Promise<AgentInvocationResult>;
+  invoke(params: { messages: Array<Message> }): Promise<AgentInvocationResult>;
 }
 
 /** An AI to be used for extracting structured output from the conversation. */
@@ -89,15 +82,9 @@ export async function evaluate<A extends Agent>({
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i];
 
-    const previousActualMessages = evaluatedSegmentPromises
-      .slice(0, i)
-      .flatMap((m) =>
-        m.type === 'message'
-          ? [m.message]
-          : m.type === 'agent_response'
-            ? [{ ...m.agentResponse.response, context: m.agentResponse.context }]
-            : [],
-      );
+    const previousActualMessages = evaluatedSegmentPromises.flatMap((m) =>
+      m.type === 'message' ? [m.message] : [],
+    );
 
     const segmentResult = await segment.evaluate({ agent: _agent, previousActualMessages });
 

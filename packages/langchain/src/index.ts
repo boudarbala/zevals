@@ -98,7 +98,7 @@ export function langChainZEvalsAgent({
   runnable: Runnable<LCBaseMessage[], LCBaseMessage>;
 }): Agent {
   return {
-    async invoke(messages) {
+    async invoke({ messages }) {
       const lcMessages = messages.flatMap((m) => {
         const message = langChainMessageFromZEvals(m);
         return message ? [message] : [];
@@ -114,7 +114,7 @@ export function langChainZEvalsAgent({
         );
       }
 
-      return { response: { role: 'assistant', content: response.content.toString() } };
+      return { message: { role: 'assistant', content: response.content.toString() } };
     },
   };
 }

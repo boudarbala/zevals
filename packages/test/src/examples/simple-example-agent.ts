@@ -38,7 +38,7 @@ export function simpleExampleAgent(): zevals.Agent {
   const agent = createReactAgent({ llm: model, tools: [dateTool] });
 
   return {
-    async invoke(messages) {
+    async invoke({ messages }) {
       const userMessage = messages.findLast((m) => m.role === 'user');
       if (!userMessage) {
         throw new Error('No user message found');
@@ -68,8 +68,7 @@ export function simpleExampleAgent(): zevals.Agent {
 
       return {
         // We return our AI agent's response to the evaluator
-        response: { role: 'assistant', content: agentResponse.content.toString() },
-        context,
+        message: { role: 'assistant', content: agentResponse.content.toString(), context },
       };
     },
   };

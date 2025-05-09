@@ -1,5 +1,5 @@
 import { Criterion, CriterionResult } from './criteria/criterion';
-import { Agent, AgentInvocationResult, AIMessage, Message, UserMessage } from './eval-runner';
+import { Agent, AIMessage, Message, UserMessage } from './eval-runner';
 
 /** An AI that plays the role of a user. */
 export interface SyntheticUser {
@@ -30,9 +30,9 @@ export function message(message: Message): Segment {
 export function agentResponse<A extends Agent = Agent>(): Segment<A> {
   return {
     async evaluate({ agent, previousActualMessages }) {
-      const agentResponse = await agent.invoke(previousActualMessages);
+      const agentResponse = await agent.invoke({ messages: previousActualMessages });
 
-      return [{ type: 'agent_response', agentResponse }];
+      return [{ type: 'message', message: agentResponse.message }];
     },
   };
 }
@@ -54,11 +54,6 @@ export function aiEval(criterion: Criterion<any>): Segment {
   };
 }
 
-// export type Segment =
-//   | { type: 'message'; message: Message }
-//   | { type: 'user_simulation'; until: Criterion<any>; user: SyntheticUser; max?: number }
-//   | { type: 'agent_response' };
-
 /** The result of evaluating a {@link Segment}. */
 export type SegmentEvaluationPromise =
   | {
@@ -66,7 +61,6 @@ export type SegmentEvaluationPromise =
       criterion: Criterion<any>;
       evalResult: Promise<CriterionResult<any>>;
     }
-  | { type: 'agent_response'; agentResponse: AgentInvocationResult }
   | { type: 'message'; message: Message };
 
 export function userSimulation({
@@ -95,13 +89,13 @@ export function userSimulation({
         });
         previousActualMessages.push({ role: 'user', content: userResponse.content });
 
-        const agentResponse = await agent.invoke(previousActualMessages);
+        const agentResponse = await agent.invoke({ messages: previousActualMessages });
 
         evaluatedSegmentPromises.push({
-          type: 'agent_response',
-          agentResponse: agentResponse,
+          type: 'message',
+          message: agentResponse.message,
         });
-        previousActualMessages.push(agentResponse.response);
+        previousActualMessages.push(agentResponse.message);
 
         const breakConditionResult = await until.evaluate({
           messages: previousActualMessages,

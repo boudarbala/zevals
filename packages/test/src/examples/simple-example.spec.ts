@@ -6,7 +6,7 @@ test('Simple example', async () => {
   const agent: zevals.Agent = {
     async invoke(messages) {
       // Run your application logic to generate a response for the user
-      return { response: { role: 'assistant', content: 'What kind of vitamin?' } };
+      return { message: { role: 'assistant', content: 'What kind of vitamin?' } };
     },
   };
 
