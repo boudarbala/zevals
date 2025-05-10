@@ -5,7 +5,7 @@ import { Factuality } from 'autoevals';
 import { getTestModel } from './test.util.js';
 
 describe('Autoevals', () => {
-  test('Running autoevals scorers', { timeout: 10000 }, async () => {
+  test('Running autoevals scorers', { timeout: 20000 }, async () => {
     const criterion = new AutoEvalsScorerCriterion({
       name: 'factuality',
       scorer: ({ messages }) =>

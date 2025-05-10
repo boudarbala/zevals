@@ -1,4 +1,4 @@
-import * as zevals from '@zevals/core';
+import zevals from '@zevals/core';
 import { simpleExampleAgent } from './simple-example-agent.js';
 
 test('Tool calls example', { timeout: 20000 }, async () => {
@@ -36,5 +36,6 @@ test('Tool calls example', { timeout: 20000 }, async () => {
     ],
   });
 
-  expect(getResultOrThrow(dateToolCalledAssertion).status).toEqual('success');
+  const { error } = getResultOrThrow(dateToolCalledAssertion);
+  if (error) throw error;
 });

@@ -1,7 +1,7 @@
 import { tool } from '@langchain/core/tools';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
-import * as zevals from '@zevals/core';
+import zevals from '@zevals/core';
 import { langChainMessagesFromZEvals, langChainMessageToZEvals } from '@zevals/langchain';
 
 /**

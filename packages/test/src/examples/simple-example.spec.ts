@@ -1,5 +1,5 @@
 import { ChatOpenAI } from '@langchain/openai';
-import * as zevals from '@zevals/core';
+import zevals from '@zevals/core';
 import { langChainZEvalsJudge } from '@zevals/langchain';
 
 test('Simple example', async () => {

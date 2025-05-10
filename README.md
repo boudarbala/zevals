@@ -12,7 +12,7 @@ Zevals provides utilities for testing AI agents. Unlike the few existing AI eval
 
 ```typescript
 import { ChatOpenAI } from '@langchain/openai';
-import * as zevals from '@zevals/core';
+import zevals from '@zevals/core';
 import { langChainZEvalsJudge } from '@zevals/langchain';
 
 test('Simple example', async () => {
@@ -54,10 +54,19 @@ test('Simple example', async () => {
 });
 ```
 
+> [!NOTE]
+> You can find more examples in the [examples directory](./packages/test/src/examples/).
+
 # Installation
 
 ```sh
 npm install @zevals/core
+
+# To use with LangChain models
+npm install @zevals/langchain
+
+# To use autoevals scorers
+npm install @zevals/autoevals
 ```
 
 # Features
@@ -76,10 +85,10 @@ npm install @zevals/core
 Zevals provies a few ways to assert that your agent did what it was supposed to do. Most notably, you can run assertions on the tool calls made by your agents:
 
 ```typescript
-import * as zevals from '@zevals/core';
+import zevals from '@zevals/core';
 import { simpleExampleAgent } from './simple-example-agent.js';
 
-test('Tool calls example', { timeout: 10000 }, async () => {
+test('Tool calls example', { timeout: 20000 }, async () => {
   const agent = simpleExampleAgent();
 
   // We expect the `get_current_date` tool to be called and to return the current date
@@ -114,9 +123,62 @@ test('Tool calls example', { timeout: 10000 }, async () => {
     ],
   });
 
-  expect(getResultOrThrow(dateToolCalledAssertion).status).toEqual('success');
+  const error = getResultOrThrow(dateToolCalledAssertion).error;
+  if (error) throw error;
 });
 ```
 
 > [!NOTE]
-> You can find more examples in the [examples directory](./packages/test/src/examples/).
+> You can very easily create new types of assertions. See the [`Criterion` interface](./packages/core/src/criteria/criterion.ts).
+
+## User Simulation
+
+You can simulate a human user by specifying a prompt for the user, and a condition to signal the end of the simulation.
+
+```typescript
+import { RunnableLambda } from '@langchain/core/runnables';
+import { ChatOpenAI } from '@langchain/openai';
+import zevals from '@zevals/core';
+import { langChainZEvalsJudge, langChainZEvalsSyntheticUser } from '@zevals/langchain';
+import { simpleExampleAgent } from './simple-example-agent.js';
+
+test('User simulation example', { timeout: 60000 }, async () => {
+  const agent = simpleExampleAgent();
+  const model = new ChatOpenAI({ model: 'gpt-4.1-mini', temperature: 0 });
+  const judge = langChainZEvalsJudge({ model });
+
+  const user = langChainZEvalsSyntheticUser({
+    runnable: RunnableLambda.from((messages) =>
+      model.invoke([
+        {
+          role: 'system',
+          content: `You will ask three questions, each in a separate message. Do not repeat the same question.
+             Question 1) What is the capital of France? 
+             Question 2) What is the capital of Germany? 
+             Question 3) What is the capital of Italy?`,
+        },
+        ...messages,
+      ]),
+    ),
+  });
+
+  const { messages, success } = await zevals.evaluate({
+    agent,
+    segments: [
+      zevals.userSimulation({
+        user,
+        until: zevals.aiAssertion({
+          judge,
+          prompt: 'The assistant has answered THREE questions',
+        }),
+      }),
+    ],
+  });
+
+  expect(success).toBe(true);
+  expect(messages.length).toBe(6);
+});
+```
+
+> [!NOTE]
+> A `userSimulation` is a type of [Segment](./packages/core/src/segment.ts). You can very easily create new types of segments by implementing the interface.

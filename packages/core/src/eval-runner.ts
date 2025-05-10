@@ -122,6 +122,8 @@ export async function evaluate<A extends Agent>({
     results,
     /** Evaluation results grouped by status. */
     resultsByStatus,
+    /** Resulting messages. */
+    messages: evaluatedSegmentPromises.flatMap((m) => (m.type === 'message' ? [m.message] : [])),
 
     /** True if no evals failed. */
     success: resultsByStatus.failure.length === 0,

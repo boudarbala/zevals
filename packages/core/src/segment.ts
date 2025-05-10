@@ -79,29 +79,33 @@ export function userSimulation({
       const maxIterations = max ?? 10;
 
       for (let i = 0; i < maxIterations; i++) {
+        const messages = previousActualMessages.concat(
+          evaluatedSegmentPromises.flatMap((seg) => (seg.type === 'message' ? [seg.message] : [])),
+        );
         const userResponse = await user.respond({
-          messages: previousActualMessages.flatMap((m) => {
-            if (m.role === 'user' || m.role === 'assistant') return [m];
-            return [];
+          // We flip the roles of messages sent to the synthetic user
+          messages: messages.flatMap<AIMessage | UserMessage>((m) => {
+            if (m.role === 'user') {
+              return [{ role: 'assistant' as const, content: m.content }];
+            } else if (m.role === 'assistant') {
+              return [{ role: 'user' as const, content: m.content }];
+            } else return [];
           }),
         });
         evaluatedSegmentPromises.push({
           type: 'message',
           message: { role: 'user', content: userResponse.content },
         });
-        previousActualMessages.push({ role: 'user', content: userResponse.content });
+        messages.push({ role: 'user', content: userResponse.content });
 
-        const agentResponse = await agent.invoke({ messages: previousActualMessages });
-
+        const agentResponse = await agent.invoke({ messages });
         evaluatedSegmentPromises.push({
           type: 'message',
           message: agentResponse.message,
         });
-        previousActualMessages.push(agentResponse.message);
+        messages.push(agentResponse.message);
 
-        const breakConditionResult = await until.evaluate({
-          messages: previousActualMessages,
-        });
+        const breakConditionResult = await until.evaluate({ messages });
 
         // If break condition is met, we add the last successful criterion evaluation result
         if (breakConditionResult.status === 'success') {
