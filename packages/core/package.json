@@ -6,7 +6,8 @@
   "types": "./dist/index.d.ts",
   "description": "Core for ZEvals",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "pub": "npm publish"
   },
   "keywords": [
     "ai",

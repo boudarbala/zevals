@@ -6,7 +6,8 @@
   "description": "Braintrust Autoevals integration for ZEvals",
   "version": "0.1.0",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "pub": "npm publish"
   },
   "keywords": [
     "autoevals",
