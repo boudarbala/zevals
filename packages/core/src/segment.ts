@@ -76,7 +76,9 @@ export function userSimulation({
     async evaluate({ agent, previousActualMessages }) {
       const evaluatedSegmentPromises: Array<SegmentEvaluationPromise> = [];
 
-      for (let i = 0; i < (max ?? 10); i++) {
+      const maxIterations = max ?? 10;
+
+      for (let i = 0; i < maxIterations; i++) {
         const userResponse = await user.respond({
           messages: previousActualMessages.flatMap((m) => {
             if (m.role === 'user' || m.role === 'assistant') return [m];
@@ -101,14 +103,26 @@ export function userSimulation({
           messages: previousActualMessages,
         });
 
-        evaluatedSegmentPromises.push({
-          type: 'eval',
-          criterion: until,
-          evalResult: Promise.resolve(breakConditionResult),
-        });
-
+        // If break condition is met, we add the last successful criterion evaluation result
         if (breakConditionResult.status === 'success') {
-          break;
+          evaluatedSegmentPromises.push({
+            type: 'eval',
+            criterion: until,
+            evalResult: Promise.resolve(breakConditionResult),
+          });
+
+          return evaluatedSegmentPromises;
+        }
+
+        // If max is reached, we add the last failed criterion evaluation result
+        if (i === maxIterations - 1) {
+          evaluatedSegmentPromises.push({
+            type: 'eval',
+            criterion: until,
+            evalResult: Promise.resolve(breakConditionResult),
+          });
+
+          return evaluatedSegmentPromises;
         }
       }
 

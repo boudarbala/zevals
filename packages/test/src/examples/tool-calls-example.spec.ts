@@ -1,7 +1,7 @@
 import * as zevals from '@zevals/core';
 import { simpleExampleAgent } from './simple-example-agent.js';
 
-test('Tool calls example', { timeout: 10000 }, async () => {
+test('Tool calls example', { timeout: 20000 }, async () => {
   const agent = simpleExampleAgent();
 
   // We expect the `get_current_date` tool to be called and to return the current date

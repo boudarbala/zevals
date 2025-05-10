@@ -90,5 +90,7 @@ describe('Evaluator', () => {
     expect(
       res.results[2].type === 'eval' && res.results[2].evalResult.status === 'success',
     ).toBeTruthy();
+
+    expect(res.success).toBe(true);
   });
 });

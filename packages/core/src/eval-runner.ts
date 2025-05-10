@@ -1,6 +1,7 @@
 import { z, ZodObject, ZodRawShape } from 'zod';
 import { Criterion, CriterionResult } from './criteria/criterion';
 import { Segment, SegmentEvaluationPromise } from './segment';
+import { groupBy } from './utils';
 
 export type ToolCall = {
   id?: string;
@@ -111,8 +112,19 @@ export async function evaluate<A extends Agent>({
     return (res as { evalResult: CriterionResult<T> } | undefined)?.evalResult;
   };
 
+  const resultsByStatus = groupBy(
+    results.flatMap((r) => (r.type === 'eval' && r.evalResult.status ? [r] : [])),
+    (r) => r.evalResult.status ?? ('unknown' as const),
+  );
+
   return {
+    /** Evaluation history, including messages and eval results. */
     results,
+    /** Evaluation results grouped by status. */
+    resultsByStatus,
+
+    /** True if no evals failed. */
+    success: resultsByStatus.failure.length === 0,
 
     /**
      * Get all evaluation results for this particular criterion instance (using reference equality).

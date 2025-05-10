@@ -9,7 +9,10 @@ export function groupBy<T, K extends string>(array: T[], key: (item: T) => K): R
     }
     grouped[groupKey].push(item);
   }
-  return grouped;
+
+  return new Proxy(grouped, {
+    get: (target, key) => target[key as K] || [],
+  });
 }
 
 export type Result<T, E> = { data: T; error?: undefined } | { data?: undefined; error: E };
