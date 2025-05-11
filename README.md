@@ -63,10 +63,13 @@ test('Simple example', async () => {
 npm install @zevals/core
 
 # To use with LangChain models
-npm install @zevals/langchain
+npm install @langchain/core @zevals/langchain
+
+# To use Vercel AI SDK model providers
+npm install ai @zevals/vercel
 
 # To use autoevals scorers
-npm install @zevals/autoevals
+npm install autoevals @zevals/autoevals
 ```
 
 # Features
@@ -76,13 +79,13 @@ npm install @zevals/autoevals
 - Utilities for wrapping your existing user message-handling logic into an agent that can be easily tested
 - Very simple, extensible design, with no assumptions about how you will use the library
 - Facilities for benchmarking using popular benchmarks like tau-bench
-- (Optionally) integrates with any LLM provider via LangChain
-- (Optionally) integrates with Braintrust's autoeval scorers
+- (Optionally) integrates with any LLM provider via LangChain or Vercel AI SDK
+- (Optionally) integrates with Braintrust's autoevals scorers
 - As type-safe as practically possible
 
 ## Assertions
 
-Zevals provies a few ways to assert that your agent did what it was supposed to do. Most notably, you can run assertions on the tool calls made by your agents:
+Zevals provides a few ways to assert that your agent did what it was supposed to do. Most notably, you can run assertions on the tool calls made by your agents:
 
 ```typescript
 import zevals from '@zevals/core';
@@ -182,3 +185,45 @@ test('User simulation example', { timeout: 60000 }, async () => {
 
 > [!NOTE]
 > A `userSimulation` is a type of [Segment](./packages/core/src/segment.ts). You can very easily create new types of segments by implementing the interface.
+
+## Integration with LLM Providers
+
+As we've seen in the examples above, you can use any LangChain model as judge, agent, or synthetic user by using functions from `@zevals/langchain`. Similarly, you can use the `@zevals/vercel` package to utilize any provider from the Vercel AI SDK:
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import zevals from '@zevals/core';
+import { vercelZEvalsAgent, vercelZEvalsJudge } from '@zevals/vercel';
+import { generateText } from 'ai';
+
+test('Vercel AI SDK integration', { timeout: 10000 }, async () => {
+  const model = openai.chat('gpt-4.1-mini');
+
+  const agent = vercelZEvalsAgent({
+    runnable({ messages }) {
+      // Put any agent logic here
+      return generateText({ model, messages });
+    },
+  });
+
+  const judge = vercelZEvalsJudge({ model });
+
+  const { messages, success } = await zevals.evaluate({
+    agent,
+    segments: [
+      zevals.message({ role: 'user', content: 'Hello' }),
+
+      zevals.agentResponse(),
+
+      zevals.aiEval(zevals.aiAssertion({ judge, prompt: 'The assistant greeted the user' })),
+    ],
+  });
+
+  expect(success).toBe(true);
+  expect(messages).toHaveLength(2);
+});
+```
+
+# License
+
+[MIT](./LICENSE)
