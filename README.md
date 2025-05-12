@@ -63,7 +63,8 @@ test('Simple example', async () => {
 npm install @zevals/core
 
 # To use with LangChain models
-npm install @langchain/core @zevals/langchain
+# (feel free to use anything other than OpenAI)
+npm install @langchain/core @langchain/openai @zevals/langchain
 
 # To use Vercel AI SDK model providers
 npm install ai @zevals/vercel
