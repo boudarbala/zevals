@@ -1,3 +1,7 @@
+<div align="center">
+<img src="./static/zevals-logo-wide.png" alt="Zevals Logo" height="200" />
+</div>
+
 # Zevals
 
 Simple, practical AI evaluations in TypeScript.
