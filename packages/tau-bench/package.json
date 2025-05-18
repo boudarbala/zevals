@@ -1,0 +1,39 @@
+{
+  "name": "@zevals/tau-bench",
+  "version": "0.1.2",
+  "private": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "description": "Tau-Bench implementation in TypeScript",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openchatai/zevals.git",
+    "directory": "packages/tau-bench"
+  },
+  "scripts": {
+    "build": "tsc",
+    "pub": "npm publish"
+  },
+  "keywords": [
+    "ai",
+    "evaluation",
+    "testing",
+    "testing-tools"
+  ],
+  "author": "tabaza@open.cx",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/bearer-auth": "^10.1.1",
+    "@fastify/swagger": "^9.4.2",
+    "@fastify/swagger-ui": "^5.2.2",
+    "@fastify/type-provider-typebox": "^5.1.0",
+    "@sinclair/typebox": "^0.34.33",
+    "fastify": "^5.2.2"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
