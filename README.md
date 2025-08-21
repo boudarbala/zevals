@@ -77,6 +77,42 @@ npm install ai @zevals/vercel
 npm install autoevals @zevals/autoevals
 ```
 
+# Quick Start Scripts
+
+For development and testing, this repository includes convenient shell scripts:
+
+## Installation and Setup
+
+```bash
+# Install all dependencies (will install pnpm if needed)
+./install.sh
+
+# Build the project
+./build.sh
+
+# Run all tests (some require OPENAI_API_KEY)
+./test.sh
+
+# Run install, build, and test in one command
+./run.sh
+```
+
+## Running Examples
+
+```bash
+# Run a simple example that doesn't require API keys
+./test-mock-example.sh
+```
+
+The mock example demonstrates how to:
+- Create custom agents without external dependencies
+- Use mock evaluation criteria
+- Test conversation flows
+- Assert on evaluation results
+
+> [!TIP]
+> Start with `./test-mock-example.sh` to see zevals in action without needing any API keys!
+
 # Features
 
 - Support for evaluating entire scenarios, with optional user simulation
